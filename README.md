@@ -15,6 +15,7 @@ The Enhanced Laboratory Metadata Organizer (ELMO) is based on a student cooperat
     - [API-Endpunkte](#api-endpunkte)
   - [Formularfelder](#formularfelder)
   - [Data validation](#data-validation)
+  - [Data Mapping and Occurences](#data-mapping-and-occurences)
   - [Database structure](#database-structure)
   - [Contributing](#contributing)
   - [Testing](#testing)
@@ -654,7 +655,8 @@ Bestätigungsnachricht über erfolgreiche Aktualisierung
 ### Licenses & Rights
 
 - Rights Title
-The content of this field is mapped to `<rights>` in the DataCite scheme and to `<resourceConstraints> <gmd:MD_Constraints> <gmd:useLimitation>` as well as `<gmd:resourceConstraints> <gmd:MD_LegalConstraints>` in the ISO scheme.
+
+  The content of this field is mapped to `<rights>` in the DataCite scheme and to `<resourceConstraints> <gmd:MD_Constraints> <gmd:useLimitation>` as well as `<gmd:resourceConstraints> <gmd:MD_LegalConstraints>` in the ISO scheme.
 
   This field contains the title of the license with its abbreviation.
   - Data type: String
@@ -678,7 +680,7 @@ The content of this field is mapped to `<rights>` in the DataCite scheme and to 
 
   This field specifies if the license is used for software (forSoftware=1) or not (forSoftware=0). The controlled list changes for users based on this parameter when resource type Software is chosen.
 
-### Authors
+### Author(s)
 Author information mapped to `<creator>` element in the datacite scheme and to `<citedResponsibleParty>` in the ISO scheme.
 Occurrence is: 1-n
 
@@ -734,7 +736,7 @@ Occurrence is: 1-n
 ### Contact Person(s)
 A Contact Person is saved as a "Contributor" with the role "Contact Person" in the DataCite scheme (version 4.5) and as a "Point of Contact" in the ISO scheme (Version 2012-07-13)
 
-- Last name
+- Last Name
 
   This field contains the surname of the person.
   - Data type: String
@@ -743,7 +745,7 @@ A Contact Person is saved as a "Contributor" with the role "Contact Person" in t
   - Restrictions: Mandatory
   - Example values: `Jemison`, `Smith`
 
-- Firstname
+- First Name
 
   This field contains the first name of the person.
   - Data type: String
@@ -780,6 +782,7 @@ A Contact Person is saved as a "Contributor" with the role "Contact Person" in t
   - Example values: `gfz.de`, `fh-potsdam.de`
 
 - Affiliation
+    
   This field contains the affiliation of the person.
   - Data type: String
   - Occurrence: 0-n
@@ -1230,6 +1233,80 @@ This element is optional in the DataCite scheme. However, it is a best practice 
 
 <details>
   <summary>
+
+  ## Data Mapping and Occurences
+  </summary>
+The following table gives a quick overview on the occurences of the form fields in comparison to the occurences of the corresponding DataCite metadata as described in the [DataCite 4.5 documentation](https://datacite-metadata-schema.readthedocs.io/en/4.5/properties/).
+
+| Form group                    | Input Field                              |                    Occurence in ELMO                    |          Occurence in DataCite metadata scheme          | Mapped to in DataCite                                                                                                                                                               |
+| ----------------------------- | ---------------------------------------- | :-----------------------------------------------------: | :-----------------------------------------------------: | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Resource Information          | DOI                                      |                           0-1                           |                            1                            | `<identifier>` with `<identifier identifierType="DOI">`                                                                                                                             |
+|                               | Publication Year                         |                            1                            |                            1                            | `<publicationYear>`                                                                                                                                                                 |
+|                               | Resource Type                            |                            1                            |                            1                            | `<resourceTypeGeneral>`                                                                                                                                                             |
+|                               | Version                                  |                           0-1                           |                           0-1                           | `<version>`                                                                                                                                                                         |
+|                               | Language of Dataset                      |                            1                            |                           0-1                           | `<language>`                                                                                                                                                                        |
+|                               | Title                                    |           1-n (n=$maxTitles in settings.php)            |                           1-n                           | `<title>`                                                                                                                                                                           |
+|                               | Title Type                               |         1 (if corresponding title ≠ main title)         |                           0-1                           | `<titleType>`                                                                                                                                                                       |
+| Licenses & Rights             | Rights Title                             |                            1                            |                           0-n                           | `<rights>`                                                                                                                                                                          |
+|                               | rightsURI                                |                            1                            |                           0-1                           | `<rightsURI>`                                                                                                                                                                       |
+|                               | forSoftware                              |                           --                            |                           --                            | --                                                                                                                                                                                  |--
+| Author(s)                     | Last Name                                |                            1                            |                           0-1                           | `<creator><creatorName><familyName>`                                                                                                                                                |
+|                               | First Name                               |                            1                            |                           0-1                           | `<creator><creatorName><givenName>`                                                                                                                                                 |
+|                               | Author ORCID                             |                           0-1                           |                           0-n                           | `<nameIdentifier schemeURI="https://orcid.org/" nameIdentifierScheme="ORCID">`                                                                                                      |
+|                               | Affiliation                              |                           0-n                           |                           0-n                           | `<creator><creatorName><affiliation>`                                                                                                                                               |
+|                               | rorID                                    |                           0-n                           |                           0-1                           | `<creator><creatorName><affiliation>` long: `<affiliation affiliationIdentifier="https://ror.org/XXXXXXXXX" affiliationIdentifierScheme="ROR" schemeURI="https://ror.org">`         |
+| Contact Person(s)             | Last Name                                |                            1                            |                           0-1                           | `<contributor contributorType="Contact Person"><contributorName><familyName>`                                                                                                       |
+|                               | First Name                               |                            1                            |                           0-1                           | `<contributor contributorType="Contact Person"><contributorName><givenName>`                                                                                                        |
+|                               | Position                                 |                           0-1                           |                           --                            | --                                                                                                                                                                                  |
+|                               | Email adress                             |                            1                            |                           --                            | --                                                                                                                                                                                  |
+|                               | Website                                  |                           0-1                           |                           --                            | --                                                                                                                                                                                  |
+|                               | Affiliation                              |                           0-n                           |                           0-n                           | `<contributor><affiliation>`                                                                                                                                                        |
+|                               | rorID                                    |                           0-n                           |                           0-1                           | `<contributor><contributorName><affiliation>` long: `<affiliation affiliationIdentifier="https://ror.org/XXXXXXXXX" affiliationIdentifierScheme="ROR" schemeURI="https://ror.org">` |
+| Originating Laboratory        | Laboratory Name                          |                           0-n                           |                           0-n                           | `<contributor contributorType="HostingInstitution"><contributorName>`                                                                                                               |
+|                               | LabID                                    |                            1                            |                            1                            | `<nameIdentifier nameIdentifierScheme="labid">`                                                                                                                                     |
+|                               | laboratoryAffiliation                    |                            1                            |                           0-n                           | `<affiliation>`                                                                                                                                                                     |
+| Contributors                  | ORCID                                    |                           0-1                           | 1 for `<nameIdentifierScheme>` and 0-1 for `<schemeURI>` | `<nameIdentifierScheme>` and `<schemeURI>`                                                                                                                                           |
+|                               | Last Name                                |             1 (only if person is specified)             |                           0-1                           | `<familyName>`                                                                                                                                                                      |
+|                               | First Name                               |      1, (only if contributing person is specified)      |                           0-1                           | `<givenName>`                                                                                                                                                                       |
+|                               | Role                                     |    1-10 (only if a contributing person is specified)    |                            1                            | `<contributorType>`                                                                                                                                                                 |
+|                               | Affiliation                              |                           0-n                           |                           0-n                           | `<affiliation>`                                                                                                                                                                     |
+|                               | Organisation Name                        |   1 (only if contributing organisation is specified)    |                            1                            | `<contributorName>`                                                                                                                                                                 |
+|                               | Role                                     | 1-10 (only if a contributing organisation is specified) |                            1                            | `<contributorType>`                                                                                                                                                                 |
+|                               | Affiliation                              |                           0-n                           |                           0-n                           | `<affiliation>`                                                                                                                                                                     |
+| Descriptions                  | Abstract                                 |                            1                            |                           --                            | `<descriptions><description descriptionType="Abstract">`                                                                                                                            |
+|                               | Methods                                  |                           0-1                           |                           --                            | `<descriptions><description descriptionType="Methods">`                                                                                                                             |
+|                               | TechnicalInfo                            |                           0-1                           |                           --                            | `<descriptions><description descriptionType="TechnicalInfo">`                                                                                                                       |
+|                               | Other                                    |                           0-1                           |                           --                            | `<descriptions><description descriptionType="Other">`                                                                                                                               |
+| Keywords                      | EPOS Multi-Scale Laboratories Keyword    |                           0-n                           |                           0-n                           | `<subject>`                                                                                                                                                                         |
+|                               | scheme, schemeURI, valueURI und language |          1 for controlled (thesaurus) keywords          |                           --                            | --                                                                                                                                                                                  |
+|                               | GCMD Science Keywords                    |                           0-n                           |                           0-n                           | `<subject>`                                                                                                                                                                         |
+|                               | Free Keyword                             |                           0-n                           |                           0-n                           | `<subject>`                                                                                                                                                                         |
+| Dates                         | Date created                             |                            1                            |                            1                            | `<dateType="Created">`                                                                                                                                                              |
+|                               | Embargo until                            |                           0-1                           |                            1                            | `<dateType dateType="Available">`                                                                                                                                                   |
+| Spatial and Temporal Coverage | Latitude Min                             |                           0-1                           |                            1                            | `<southBoundLatitude>`                                                                                                                                                              |
+|                               | Latitude Max                             |                           0-1                           |                            1                            | `<northBoundLatitude>`                                                                                                                                                              |
+|                               | Longitude Min                            |                           0-1                           |                            1                            | `<westBoundLongitude>`                                                                                                                                                              |
+|                               | Longitude Max                            |                           0-1                           |                            1                            | `<geoLocatioeastBoundLongitudens>`                                                                                                                                                  |
+|                               | Description                              |                           0-1                           |                           0-1                           | `<geoLocationPlace>`                                                                                                                                                                |
+|                               | Start Date                               |                           0-1                           |                            1                            | `<date dateType="Collected">`                                                                                                                                                       |
+|                               | Start Time                               |                           0-1                           |                            1                            | `<date dateType "Collected">`                                                                                                                                                       |
+|                               | End Date                                 |                           0-1                           |                            1                            | `<date dateType="Collected">`                                                                                                                                                       |
+|                               | End Time                                 |                           0-1                           |                            1                            | `<date dateType="Collected">`                                                                                                                                                       |
+|                               | Timezone                                 |                           0-1                           |                           --                            | --                                                                                                                                                                                  |
+| Related Work                  | Relation                                 |                            1                            |                            1                            | `<relationType>`                                                                                                                                                                    |
+|                               | Identifier                               |                            1                            |                           0-n                           | `<relatedIdentifier>`                                                                                                                                                               |
+|                               | Identifier Type                          |                           0-1                           |                            1                            | `<relatedIdentifiertype>`                                                                                                                                                           |
+| Funding Reference             | Funder                                   |                           0-1                           |                           0-n                           | `<fundingReference>`                                                                                                                                                                |
+|                               | funderId                                 |                           0-1                           |                           0-1                           | `<funderIdentifier>`                                                                                                                                                                |
+|                               | funderidtyp                              |                           0-1                           |                            1                            | `<funderIdentifierType>`                                                                                                                                                            |
+|                               | Grant Number                             |                           0-1                           |                           0-1                           | `<awardNumber>`                                                                                                                                                                     |
+|                               | Grant Name                               |                           0-1                           |                           0-1                           | `<awardTitle>`                                                                                                                                                                      |
+
+</details>
+
+<details>
+  <summary>
+
   ## Data validation
   </summary>
 
